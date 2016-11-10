@@ -1,5 +1,8 @@
 {
   'includes': [ 'common-sqlite.gypi' ],
+  'variables': {
+    'node_uwp_dll%': 'false',
+  },
   'target_defaults': {
     'default_configuration': 'Release',
     'cflags':[
@@ -101,6 +104,25 @@
       ],
       'export_dependent_settings': [
         'action_before_build',
+      ],
+	  'conditions': [
+        ['OS == "win"', {
+          'conditions': [
+            ['node_uwp_dll=="true"',
+              {
+                'defines': [
+                  'SQLITE_OS_WINRT',
+                  'SQLITE_API=__declspec(dllexport)'
+                ],
+                'msvs_settings': {
+                  'VCCLCompilerTool': {
+                    'CompileAsWinRT': 'false'
+                  },
+                },
+              }
+            ],
+          ]
+	    }]
       ]
     }
   ]
